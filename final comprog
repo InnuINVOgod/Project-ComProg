@@ -1,0 +1,87 @@
+#include <stdio.h>
+
+// Function prototypes
+void displayMenu();
+int takeOrder();
+float calculateTotalCost(int quantity, float price);
+float processPayment(float totalCost, float payment);
+
+char *foodItems[] = {"Lugaw with rice", "Fried egg with itlog", "Porkchop cut but Fish", "Sandwich with bread", "Siomai de Mickey"};
+float foodPrices[] = {10.0, 15.5, 18.5, 22.2,30.7};
+
+int main() {
+    int choice;
+    char name[20];
+    
+    do {
+        printf("Welcome Inamaw Eatery!\nMay I take your order\n ",name);
+        printf("------------------------------------------------------");
+        displayMenu();
+        printf("-------------------------------------------------------\n");
+        // Take the order
+        int selectedFoodIndex = takeOrder();
+
+        // Take quantity input
+        int quantity;
+        printf("Enter quantity: ");
+        scanf("%d", &quantity);
+
+        // Calculate total cost
+        float totalCost = calculateTotalCost(quantity, foodPrices[selectedFoodIndex]);
+
+        // Display total cost
+        printf("Total cost: ₱%.2f\n", totalCost);
+
+        // Process payment
+        float payment;
+        printf("Enter payment amount: ₱");
+        scanf("%f", &payment);
+
+        // Display change
+        float change = processPayment(totalCost, payment);
+        printf("Change: ₱%.2f\n", change);
+
+        // Ask the user if they want to make another purchase
+        printf("Do you want to make another purchase? (1 for Yes, 0 for No): ");
+        scanf("%d", &choice);
+
+    } while (choice != 0);
+
+    printf("Thank you for visiting Inamaw Eatery, please come again!.\n");
+
+    return 0;
+}
+
+// Function definitions
+
+void displayMenu() {
+    printf("\nMenu:\n");
+    for (int i = 0; i < sizeof(foodItems) / sizeof(foodItems[0]); i++) {
+        printf("%d. %s - ₱%.2f\n", i + 1, foodItems[i], foodPrices[i]);
+    }
+}
+
+int takeOrder() {
+    int choice;
+    do {
+        printf("Enter the number of the food item you want to order: ");
+        scanf("%d", &choice);
+    } while (choice < 1 || choice > sizeof(foodItems) / sizeof(foodItems[0]));
+
+    printf("You selected: %s\n", foodItems[choice - 1]);
+    return choice - 1; // Return the index of the selected food item
+}
+
+float calculateTotalCost(int quantity, float price) {
+    return quantity * price;
+}
+
+float processPayment(float totalCost, float payment) {
+    if (payment >= totalCost) {
+        printf("Thank you for purchasing our food!\n");
+        return payment - totalCost; // Calculate change
+    } else {
+        printf("Just comeback when you have the exact account.\n");
+        return 0;
+    }
+}
